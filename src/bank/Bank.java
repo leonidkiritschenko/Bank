@@ -25,7 +25,8 @@ public class Bank {
         int input = 0;
         while(true) {
             showMenu();
-            input = ConsoleReader.readNumber("Bitte eine Zahl zwischen 1 und 10");
+            List<Integer> options = List.of(1,2,3,4,5,6,7,8,9,10);
+            input = ConsoleReader.readNumber("Bitte eine Zahl zwischen 1 und 10", options);
             pickMenu(input);
         }
     }

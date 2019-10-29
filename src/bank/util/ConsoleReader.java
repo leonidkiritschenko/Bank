@@ -22,6 +22,25 @@ public abstract class ConsoleReader {
         }
     }
 
+    public static int readNumber(String errorInfo, List<Integer> options) {
+        while (true) {
+            try {
+                Integer input = Integer.valueOf(br.readLine());
+                if (options.contains(input)) {
+                    return input;
+                } else {
+                    System.out.println(errorInfo);
+                }
+            } catch (IOException e) {
+                System.out.println(errorInfo);
+                return ConsoleReader.readNumber(errorInfo);
+            } catch (NumberFormatException e) {
+                System.out.println("Nur Zahlen!");
+                return ConsoleReader.readNumber(errorInfo);
+            }
+        }
+    }
+
     public static LocalDate readDate(String errorInfo) {
         try {
             return LocalDate.parse(br.readLine());
