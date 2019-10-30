@@ -1,5 +1,6 @@
 package bank;
 
+import bank.konto.Konto;
 import bank.kunden.Kunde;
 import bank.adresse.Adresse;
 import bank.util.ConsoleReader;
@@ -15,11 +16,62 @@ import java.util.List;
  */
 
 public class Bank {
+
+    private static final Bank INSTANCE = new Bank();
     private String name = "";
     private String BIC = "";
     private Adresse adresse;
 
     private ArrayList<Kunde> kunden;
+    private ArrayList<Konto> konten;
+
+    private Bank() { }
+
+    /**
+     * Singleton getInstance
+     * @return bank instance
+     */
+    public static Bank getInstance() {
+        return INSTANCE;
+    }
+
+    /**
+     * Singleton getInstance with parameters
+     * @param name of the bank
+     * @param BIC of the bank
+     * @param adresse of the bank
+     * @return bank instance
+     */
+    public static Bank getInstance(String name, String BIC, Adresse adresse) {
+        INSTANCE.name = name;
+        INSTANCE.BIC = BIC;
+        INSTANCE.adresse = adresse;
+        return INSTANCE;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getBIC() {
+        return BIC;
+    }
+
+    public void setBIC(String BIC) {
+        this.BIC = BIC;
+    }
+
+    public Adresse getAdresse() {
+        return new Adresse(adresse);
+    }
+
+    public void setAdresse(Adresse adresse) {
+        this.adresse = new Adresse(adresse);
+    }
 
     public void run() {
         int input = 0;
