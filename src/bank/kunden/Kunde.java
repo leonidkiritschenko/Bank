@@ -6,7 +6,6 @@ import bank.adresse.Adresse;
 import java.util.ArrayList;
 
 public abstract class Kunde {
-    private String kundennummer;
     private String telefon;
     private String email;
     private Adresse adresse;
@@ -14,19 +13,10 @@ public abstract class Kunde {
     // max 10 Konten
     private ArrayList<Konto> konten;
 
-    protected Kunde(String kundennummer, String telefon, String email, Adresse adresse) {
-        this.kundennummer = kundennummer;
+    protected Kunde(String telefon, String email, Adresse adresse) {
         this.telefon = telefon;
         this.email = email;
         this.adresse = adresse;
-    }
-
-    public String getKundennummer() {
-        return kundennummer;
-    }
-
-    public void setKundennummer(String kundennummer) {
-        this.kundennummer = kundennummer;
     }
 
     public String getTelefon() {

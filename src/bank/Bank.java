@@ -3,10 +3,12 @@ package bank;
 import bank.konto.Konto;
 import bank.kunden.Kunde;
 import bank.adresse.Adresse;
+import bank.kunden.Privatkunde;
 import bank.util.ConsoleReader;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,8 +24,8 @@ public class Bank {
     private String BIC = "";
     private Adresse adresse;
 
-    private ArrayList<Kunde> kunden;
-    private ArrayList<Konto> konten;
+    private ArrayList<Kunde> kunden = new ArrayList<>();
+    private ArrayList<Konto> konten = new ArrayList<>();
 
     private Bank() { }
 
@@ -74,7 +76,7 @@ public class Bank {
     }
 
     public void run() {
-        int input = 0;
+        int input;
         while(true) {
             showMenu();
             List<Integer> options = List.of(1,2,3,4,5,6,7,8,9,10);
@@ -133,6 +135,34 @@ public class Bank {
 
     private void createPrivatkunde() {
 
+        System.out.println("Für einen neuen Privatkunden brauchen wir folgende Angaben:");
+
+        // Vorname
+        System.out.println("Vorname: ");
+        String vorname = ConsoleReader.readString("Bitte Vorname angeben.");
+
+        // Nachname
+        System.out.println("Nachname: ");
+        String nachname = ConsoleReader.readString("Bitte Nachnamen angeben.");
+
+        // Telefonnummer
+        System.out.println("Telefonnummer: ");
+        String telefon = ConsoleReader.readString("Bitte Telefonnummer angeben.");
+
+        // Email
+        System.out.println("Email: ");
+        String email = ConsoleReader.readString("Bitte Email angeben.");
+
+        // Geburtsdatum
+        System.out.println("Geburtsdatum (yyyy-mm-dd): ");
+        LocalDate bday = ConsoleReader.readDate("Bitte Geburtsdatum angeben.");
+
+        // Adresse
+        Adresse adresse = createAdress();
+        Privatkunde privatkunde = new Privatkunde(vorname, nachname, telefon, email, bday, adresse);
+        kunden.add(privatkunde);
+        System.out.println("Neuen Privatkunden mit Kundennumer " + privatkunde.getKundennummer() +
+                " erfolgreich angelet.");
     }
 
     private void createFirmenkunde() {
@@ -177,5 +207,19 @@ public class Bank {
             System.out.println("Bis zum nächsten Mal.");
             System.exit(0);
         }
+    }
+
+    private Adresse createAdress() {
+        System.out.println("Für eine neue Adresse brauchen wir folgende Angaben:");
+
+        System.out.println("Straße: ");
+        String street = ConsoleReader.readString("Bitte Straße angeben.");
+
+        System.out.println("Hausnummer: ");
+        String houseNr = ConsoleReader.readString("Bitte Hausnummer angeben.");
+
+        System.out.println("Ort");
+        String city = ConsoleReader.readString("Bitte Ort angeben.");
+        return new Adresse(street, houseNr, city);
     }
 }
