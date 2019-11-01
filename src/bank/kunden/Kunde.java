@@ -19,6 +19,8 @@ public abstract class Kunde {
         this.adresse = adresse;
     }
 
+    public abstract String getKundennummer();
+
     public String getTelefon() {
         return telefon;
     }

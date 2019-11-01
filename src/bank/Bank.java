@@ -139,23 +139,18 @@ public class Bank {
 
         System.out.println("Für einen neuen Privatkunden brauchen wir folgende Angaben:");
 
-        // Vorname
         System.out.println("Vorname: ");
         String vorname = ConsoleReader.readString("Bitte Vorname angeben.");
 
-        // Nachname
         System.out.println("Nachname: ");
         String nachname = ConsoleReader.readString("Bitte Nachnamen angeben.");
 
-        // Telefonnummer
         System.out.println("Telefonnummer: ");
         String telefon = ConsoleReader.readString("Bitte Telefonnummer angeben.");
 
-        // Email
         System.out.println("Email: ");
         String email = ConsoleReader.readString("Bitte Email angeben.");
 
-        // Geburtsdatum
         System.out.println("Geburtsdatum (yyyy-mm-dd): ");
         LocalDate bday = ConsoleReader.readDate("Bitte Geburtsdatum angeben.");
 
@@ -202,7 +197,6 @@ public class Bank {
             }
         }
 
-        // Adresse
         Adresse adresse = createAdress();
         Privatkunde privatkunde = new Privatkunde(vorname, nachname, telefon, email, bday, adresse);
         kunden.add(privatkunde);
@@ -406,5 +400,35 @@ public class Bank {
         }
         return new Ansprechpartner(vorname, nachname, telefon);
 
+    }
+
+    private Kunde searchKundeByKundennummer(String knummer) {
+        for (Kunde kunde : kunden) {
+            if (kunde.getKundennummer().equalsIgnoreCase(knummer)) {
+                return kunde;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Searches for customers with matching name
+     * @param name of the customer (private: Vorname, Nachname) (company: Firmennamme)
+     * @return found customer or null
+     */
+    private Kunde searchKundeByName(String name) {
+        for (Kunde kunde : kunden) {
+            if (kunde instanceof Privatkunde) {
+                if (((Privatkunde)kunde).getVorname().equalsIgnoreCase(name) || ((Privatkunde)kunde).getNachname().equalsIgnoreCase(name)) {
+                    return kunde;
+                }
+            }
+            if (kunde instanceof Firmenkunde) {
+                if (((Firmenkunde)kunde).getFirmenname().equalsIgnoreCase(name)) {
+                    return kunde;
+                }
+            }
+        }
+        return null;
     }
 }
