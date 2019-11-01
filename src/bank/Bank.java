@@ -157,6 +157,49 @@ public class Bank {
         System.out.println("Geburtsdatum (yyyy-mm-dd): ");
         LocalDate bday = ConsoleReader.readDate("Bitte Geburtsdatum angeben.");
 
+        while (true) {
+            System.out.println("Wollen Sie die Angaben korrigieren? (j/n)");
+            List<String> options = List.of("j", "n");
+            String input = ConsoleReader.readString("Bitte 'j' oder 'n'.", options);
+            if (input.equalsIgnoreCase("j")) {
+                System.out.println("Welche Angaben wollen Sie korrigieren?");
+                System.out.println("(01) Vorname: " + vorname);
+                System.out.println("(02) Nachname: " + nachname);
+                System.out.println("(03) Telefonnummer: " + telefon);
+                System.out.println("(04) Email: " + email);
+                System.out.println("(05) Geburtsdatum: " + bday);
+                List<Integer> optionsNum = List.of(1,2,3,4,5);
+                int inputNum = ConsoleReader.readNumber("Bitte 1-5 als Option angeben.", optionsNum);
+                switch (inputNum) {
+                    case 1:
+                        System.out.println("Vorname: ");
+                        vorname = ConsoleReader.readString("Bitte Vorname angeben.");
+                        break;
+                    case 2:
+                        System.out.println("Nachname: ");
+                        nachname = ConsoleReader.readString("Bitte Nachname angeben.");
+                        break;
+                    case 3:
+                        System.out.println("Telefonnummer: ");
+                        telefon = ConsoleReader.readString("Bitte Telefonnummer angeben.");
+                        break;
+                    case 4:
+                        System.out.println("Email: ");
+                        email = ConsoleReader.readString("Bitte Email angeben.");
+                        break;
+                    case 5:
+                        System.out.println("Geburtsdatum: ");
+                        bday = ConsoleReader.readDate("Bitte Geburtsdatum angeben.");
+                        break;
+                    default:
+                        assert false;
+                }
+            } else {
+                System.out.println("Die Angaben zum Privatkunden werden übernommen.");
+                break;
+            }
+        }
+
         // Adresse
         Adresse adresse = createAdress();
         Privatkunde privatkunde = new Privatkunde(vorname, nachname, telefon, email, bday, adresse);
@@ -220,6 +263,40 @@ public class Bank {
 
         System.out.println("Ort");
         String city = ConsoleReader.readString("Bitte Ort angeben.");
+
+        // TODO: Export correction into separate method.
+        while (true) {
+            System.out.println("Wollen Sie die Angaben korrigieren? (j/n)");
+            List<String> options = List.of("j", "n");
+            String input = ConsoleReader.readString("Bitte 'j' oder 'n'.", options);
+            if (input.equalsIgnoreCase("j")) {
+                System.out.println("Welche Angaben wollen Sie korrigieren?");
+                System.out.println("(01) Straße: " + street);
+                System.out.println("(02) Hausnummer: " + houseNr);
+                System.out.println("(03) Ort: " + city);
+                List<Integer> optionsNum = List.of(1,2,3);
+                int inputNum = ConsoleReader.readNumber("Bitte 1-3 als Option angeben.", optionsNum);
+                switch (inputNum) {
+                    case 1:
+                        System.out.println("Straße: ");
+                        street = ConsoleReader.readString("Bitte Straße angeben.");
+                        break;
+                    case 2:
+                        System.out.println("Hausnummer: ");
+                        houseNr = ConsoleReader.readString("Bitte Hausnummer angeben.");
+                        break;
+                    case 3:
+                        System.out.println("Ort: ");
+                        city = ConsoleReader.readString("Bitte Ort angeben.");
+                        break;
+                    default:
+                        assert false;
+                }
+            } else {
+                System.out.println("Die Angaben zur Adresse werden übernommen.");
+                break;
+            }
+        }
         return new Adresse(street, houseNr, city);
     }
 }
