@@ -21,23 +21,12 @@ public class Ansprechpartner {
         return vorname;
     }
 
-    public void setVorname(String vorname) {
-        this.vorname = vorname;
-    }
-
     public String getNachname() {
         return nachname;
-    }
-
-    public void setNachname(String nachname) {
-        this.nachname = nachname;
     }
 
     public String getTelefon() {
         return telefon;
     }
 
-    public void setTelefon(String telefon) {
-        this.telefon = telefon;
-    }
 }

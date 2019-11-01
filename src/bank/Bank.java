@@ -1,6 +1,8 @@
 package bank;
 
 import bank.konto.Konto;
+import bank.kunden.Ansprechpartner;
+import bank.kunden.Firmenkunde;
 import bank.kunden.Kunde;
 import bank.adresse.Adresse;
 import bank.kunden.Privatkunde;
@@ -209,7 +211,61 @@ public class Bank {
     }
 
     private void createFirmenkunde() {
+        System.out.println("Für einen neuen Firmenkunde brauchen wir folgende Angaben:");
 
+        // Firmennamen
+        System.out.println("Firmennamen: ");
+        String name = ConsoleReader.readString("Bitte Firmennamen angeben.");
+
+        // Telefonnummer
+        System.out.println("Telefonnummer: ");
+        String telefon = ConsoleReader.readString("Bitte Telefonnummer angeben.");
+
+        // Email
+        System.out.println("Email: ");
+        String email = ConsoleReader.readString("Bitte Email angeben.");
+
+        while (true) {
+            System.out.println("Wollen Sie die Angaben korrigieren? (j/n)");
+            List<String> options = List.of("j", "n");
+            String input = ConsoleReader.readString("Bitte 'j' oder 'n'.", options);
+            if (input.equalsIgnoreCase("j")) {
+                System.out.println("Welche Angaben wollen Sie korrigieren?");
+                System.out.println("(01) Firmenname: " + name);
+                System.out.println("(02) Telefonnummer: " + telefon);
+                System.out.println("(03) Email: " + email);
+                List<Integer> optionsNum = List.of(1,2,3);
+                int inputNum = ConsoleReader.readNumber("Bitte 1-3 als Option angeben.", optionsNum);
+                switch (inputNum) {
+                    case 1:
+                        System.out.println("Firmenname: ");
+                        name = ConsoleReader.readString("Bitte Firmenname angeben.");
+                        break;
+                    case 2:
+                        System.out.println("Telefonnummer: ");
+                        telefon = ConsoleReader.readString("Bitte Telefonnummer angeben.");
+                        break;
+                    case 3:
+                        System.out.println("Email: ");
+                        email = ConsoleReader.readString("Bitte Email angeben.");
+                        break;
+                    default:
+                        assert false;
+                }
+            } else {
+                System.out.println("Die Angaben zum Firmenkunde werden übernommen.");
+                break;
+            }
+        }
+
+        Ansprechpartner ansprechpartner = createAnsprechpartner();
+
+        Adresse adresse = createAdress();
+
+        Firmenkunde firmenkunde = new Firmenkunde(name, ansprechpartner, telefon, email, adresse);
+        kunden.add(firmenkunde);
+        System.out.println("Neuer Firmenkunde mit Kundennumer " + firmenkunde.getKundennummer() +
+                " erfolgreich angelet.");
     }
 
     private void createKonto() {
@@ -298,5 +354,57 @@ public class Bank {
             }
         }
         return new Adresse(street, houseNr, city);
+    }
+
+    private Ansprechpartner createAnsprechpartner() {
+        System.out.println("Für einen neuen Ansprechpartner brauchen wir folgende Angaben:");
+
+        // Vorname
+        System.out.println("Vorname: ");
+        String vorname = ConsoleReader.readString("Bitte Vorname angeben.");
+
+        // Nachname
+        System.out.println("Nachname: ");
+        String nachname = ConsoleReader.readString("Bitte Nachnamen angeben.");
+
+        // Telefonnummer
+        System.out.println("Telefonnummer: ");
+        String telefon = ConsoleReader.readString("Bitte Telefonnummer angeben.");
+
+        // TODO: Export correction into separate method.
+        while (true) {
+            System.out.println("Wollen Sie die Angaben korrigieren? (j/n)");
+            List<String> options = List.of("j", "n");
+            String input = ConsoleReader.readString("Bitte 'j' oder 'n'.", options);
+            if (input.equalsIgnoreCase("j")) {
+                System.out.println("Welche Angaben wollen Sie korrigieren?");
+                System.out.println("(01) Vorname: " + vorname);
+                System.out.println("(02) Nachname: " + nachname);
+                System.out.println("(03) Telefonnummer: " + telefon);
+                List<Integer> optionsNum = List.of(1,2,3);
+                int inputNum = ConsoleReader.readNumber("Bitte 1-3 als Option angeben.", optionsNum);
+                switch (inputNum) {
+                    case 1:
+                        System.out.println("Vorname: ");
+                        vorname = ConsoleReader.readString("Bitte Vorname angeben.");
+                        break;
+                    case 2:
+                        System.out.println("Nachname: ");
+                        nachname = ConsoleReader.readString("Bitte Nachname angeben.");
+                        break;
+                    case 3:
+                        System.out.println("Telefonnummer: ");
+                        telefon = ConsoleReader.readString("Bitte Telefonnummer angeben.");
+                        break;
+                    default:
+                        assert false;
+                }
+            } else {
+                System.out.println("Die Angaben zum Ansprechpartner werden übernommen.");
+                break;
+            }
+        }
+        return new Ansprechpartner(vorname, nachname, telefon);
+
     }
 }
