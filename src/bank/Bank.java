@@ -263,7 +263,35 @@ public class Bank {
     }
 
     private void createKonto() {
+        System.out.println("Konto anlegen.");
 
+        System.out.println("Zu welchem Kunden wird das Konto zugeordnet?");
+        System.out.println("Kundennummer fängt mit 'P' oder 'F' an: ");
+        String input = ConsoleReader.readString("Kundennummer fängt mit 'P' oder 'F' an.");
+        Kunde kunde = searchKundeByKundennummer(input);
+        Privatkunde pKunde;
+        Firmenkunde fKunde;
+        if (kunde != null) {
+
+            System.out.println("Bitte geben sie die IBAN an: ");
+            String iban = ConsoleReader.readString("Bitte IBAN angeben.");
+
+            Konto konto = new Konto(iban);
+            if (kunde instanceof Privatkunde) {
+                pKunde = (Privatkunde) kunde;
+                pKunde.addKonto(konto);
+            }
+            if (kunde instanceof Firmenkunde) {
+                fKunde = (Firmenkunde) kunde;
+                fKunde.addKonto(konto);
+            }
+            konten.add(konto);
+
+            System.out.println("Konto mit IBAN " + konto.getIBAN() + " erfolgreich hinzugefügt.");
+
+        } else {
+            System.out.println("Keinen Kunden mit der Kundennummer " + input + " gefunden!");
+        }
     }
 
     private void showKundenKontoOfKundennumer() {
@@ -427,6 +455,20 @@ public class Bank {
                 if (((Firmenkunde)kunde).getFirmenname().equalsIgnoreCase(name)) {
                     return kunde;
                 }
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Search for konto with matching IBAN.
+     * @param iban of the konto
+     * @return konto with IBAN or null
+     */
+    private Konto searchKontoByIBAN(String iban) {
+        for (Konto konto : konten) {
+            if (konto.getIBAN().equalsIgnoreCase(iban)) {
+                return konto;
             }
         }
         return null;

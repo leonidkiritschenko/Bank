@@ -2,9 +2,9 @@ package bank.konto;
 
 public class Konto {
     private String IBAN;
-    private double kontostand;
+    private double kontostand = 0.0;
 
-    public Konto(String IBAN, double kontostand) {
+    public Konto(String IBAN) {
         this.IBAN = IBAN;
         this.kontostand = kontostand;
     }
@@ -16,10 +16,6 @@ public class Konto {
 
     public String getIBAN() {
         return IBAN;
-    }
-
-    public void setIBAN(String IBAN) {
-        this.IBAN = IBAN;
     }
 
     public double getKontostand() {
