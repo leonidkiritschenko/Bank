@@ -12,6 +12,8 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -26,7 +28,9 @@ public class Bank {
     private String BIC = "";
     private Adresse adresse;
 
-    private ArrayList<Kunde> kunden = new ArrayList<>();
+    // private ArrayList<Kunde> kunden = new ArrayList<>();
+  private ArrayList<Privatkunde> privatekunden = new ArrayList<>();
+    private ArrayList<Firmenkunde> firmenkunden = new ArrayList<>();
     private ArrayList<Konto> konten = new ArrayList<>();
 
     private Bank() { }
@@ -199,7 +203,7 @@ public class Bank {
 
         Adresse adresse = createAdress();
         Privatkunde privatkunde = new Privatkunde(vorname, nachname, telefon, email, bday, adresse);
-        kunden.add(privatkunde);
+        this.privatekunden.add(privatkunde);
         System.out.println("Neuen Privatkunden mit Kundennumer " + privatkunde.getKundennummer() +
                 " erfolgreich angelet.");
     }
@@ -257,7 +261,7 @@ public class Bank {
         Adresse adresse = createAdress();
 
         Firmenkunde firmenkunde = new Firmenkunde(name, ansprechpartner, telefon, email, adresse);
-        kunden.add(firmenkunde);
+        this.firmenkunden.add(firmenkunde);
         System.out.println("Neuer Firmenkunde mit Kundennumer " + firmenkunde.getKundennummer() +
                 " erfolgreich angelet.");
     }
@@ -295,29 +299,85 @@ public class Bank {
     }
 
     private void showKundenKontoOfKundennumer() {
+      System.out.println("Kunde mit Konten anzeigen (Auswahl durch Kundennummer).");
 
+      System.out.println("Zu welchem Kunden das Konto anzeigen?");
+      System.out.println("Kundennummer fängt mit 'P' oder 'F' an: ");
+      String input = ConsoleReader.readString("Kundennummer fängt mit 'P' oder 'F' an.");
+
+      Kunde kunde = searchKundeByKundennummer(input);
+      if (kunde != null) {
+        if (kunde instanceof Privatkunde) {
+          showPrivatkunden((Privatkunde)kunde);
+        }
+
+        if (kunde instanceof Firmenkunde) {
+          showFirmenkunden((Firmenkunde) kunde);
+        }
+        showKonten(kunde.getKonten().toArray(Konto[]::new));
+      } else {
+        System.out.println("Keinen Kunden mit der Kundennummer " + input + " gefunden!");
+      }
     }
 
     private void showKundenKontoOfName() {
-        // Bei Auswahl durch Name soll der Suchtext beim Privatkunden im Vor- oder Nachnamen und bei Firmenkunden im
-        // Firmennamen enthalten sein.
+      System.out.println("Kunde mit Konten anzeigen (Auswahl durch Name)");
 
+      System.out.println("Zu welchem Kunden das Konto anzeigen?");
+      System.out.println("Kundenname (Firma, Vor-, Nachname): ");
+      String input = ConsoleReader.readString("Kundenname (Firma, Vor-, Nachname): ");
+
+      Kunde kunde = searchKundeByName(input);
+
+      if (kunde != null) {
+
+        if (kunde instanceof Privatkunde) {
+          showPrivatkunden((Privatkunde)kunde);
+        }
+
+        if (kunde instanceof Firmenkunde) {
+          showFirmenkunden((Firmenkunde)kunde);
+        }
+        showKonten(kunde.getKonten().toArray(Konto[]::new));
+
+      } else {
+        System.out.println("Keinen Kunden mit dem Namen " + input + " gefunden!");
+      }
     }
 
     private void showKontoOfIBAN() {
+      System.out.println("Konto anzeigen (Auswahl durch IBAN)");
 
+      System.out.println("Zu welcher IBAN suchen Sie das Konto?");
+      System.out.println("IBAN: ");
+      String input = ConsoleReader.readString("IBAN bitte.");
+
+      Konto konto = searchKontoByIBAN(input);
+      if (konto != null) {
+        showKonten(konto);
+      } else {
+        System.out.println("Kein Konto mit der IBAN " + input + " gefunden!");
+      }
     }
 
     private void showAllKunden() {
+      System.out.println("Alle Kunden unsortiert anzeigen");
 
+      showPrivatkunden(privatekunden.toArray(Privatkunde[]::new));
+      showFirmenkunden(firmenkunden.toArray(Firmenkunde[]::new));
     }
 
     private void showAllKundenSorted() {
-
+      System.out.println("Alle Kunden sortiert nach aufsteigender Kundenummer anzeigen");
+      Collections.sort(privatekunden);
+      showPrivatkunden(privatekunden.toArray(Privatkunde[]::new));
+      Collections.sort(firmenkunden);
+      showFirmenkunden(firmenkunden.toArray(Firmenkunde[]::new));
     }
 
     private void showAllKonten() {
-
+      System.out.println("Alle Konten unsortiert anzeigen");
+      showKonten(konten.toArray(Konto[]::new));
     }
 
     private void beenden() {
@@ -431,11 +491,17 @@ public class Bank {
     }
 
     private Kunde searchKundeByKundennummer(String knummer) {
-        for (Kunde kunde : kunden) {
+        for (Kunde kunde : privatekunden) {
             if (kunde.getKundennummer().equalsIgnoreCase(knummer)) {
                 return kunde;
             }
         }
+
+      for (Kunde kunde : firmenkunden) {
+        if (kunde.getKundennummer().equalsIgnoreCase(knummer)) {
+          return kunde;
+        }
+      }
         return null;
     }
 
@@ -445,19 +511,18 @@ public class Bank {
      * @return found customer or null
      */
     private Kunde searchKundeByName(String name) {
-        for (Kunde kunde : kunden) {
-            if (kunde instanceof Privatkunde) {
-                if (((Privatkunde)kunde).getVorname().equalsIgnoreCase(name) || ((Privatkunde)kunde).getNachname().equalsIgnoreCase(name)) {
-                    return kunde;
-                }
-            }
-            if (kunde instanceof Firmenkunde) {
-                if (((Firmenkunde)kunde).getFirmenname().equalsIgnoreCase(name)) {
-                    return kunde;
-                }
-            }
+      for (Firmenkunde kunde : firmenkunden) {
+        if (kunde.getFirmenname().equalsIgnoreCase(name)) {
+          return kunde;
         }
-        return null;
+      }
+
+      for (Privatkunde kunde : privatekunden) {
+        if (kunde.getVorname().equalsIgnoreCase(name) || kunde.getNachname().equalsIgnoreCase(name)) {
+          return kunde;
+        }
+      }
+      return null;
     }
 
     /**
@@ -472,5 +537,56 @@ public class Bank {
             }
         }
         return null;
+    }
+
+    private void showPrivatkunden(Privatkunde... kunden) {
+      System.out.println("Kundennummer | Vorname | Nachname | Telefon | Email | Geburtsdatum | Ort | Straße | Nr.");
+      for (Privatkunde kunde : kunden) {
+        Adresse adresse = kunde.getAdresse();
+        System.out.println(
+            kunde.getKundennummer() + " | " +
+            kunde.getVorname() + " | " +
+            kunde.getNachname() + " | " +
+            kunde.getTelefon() + " | " +
+            kunde.getEmail() + " | " +
+            kunde.getGeburtsdatum() + " | " +
+            adresse.getOrt() + " | " +
+            adresse.getAdresszeile1() + " | " +
+            adresse.getAdresszeile2()
+        );
+      }
+      System.out.println();
+    }
+
+  private void showFirmenkunden(Firmenkunde... kunden) {
+    System.out.println("Kundennummer | Firmenname | Ansprechpartner Name & Nummer | Telefon | Email | Geburtsdatum | Ort | Straße | Nr.");
+    for (Firmenkunde kunde : kunden) {
+      Adresse adresse = kunde.getAdresse();
+      Ansprechpartner partner = kunde.getAnsprechpartner();
+      System.out.println(
+          kunde.getKundennummer() + " | " +
+              kunde.getFirmenname() + " | " +
+              partner.getVorname() +
+              partner.getNachname() + " & " +
+              partner.getTelefon() + " | " +
+              kunde.getTelefon() + " | " +
+              kunde.getEmail() + " | " +
+              adresse.getOrt() + " | " +
+              adresse.getAdresszeile1() + " | " +
+              adresse.getAdresszeile2()
+      );
+    }
+    System.out.println();
+  }
+
+    private void showKonten(Konto... konten) {
+      System.out.println("IBAN | Kontostand");
+      for (Konto konto : konten) {
+        System.out.println(
+            konto.getIBAN() + " | " +
+            konto.getKontostand()
+        );
+      }
+      System.out.println();
     }
 }

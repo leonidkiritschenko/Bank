@@ -1,8 +1,6 @@
 package bank.kunden;
 
-
 import bank.adresse.Adresse;
-
 import java.time.LocalDate;
 
 public class Privatkunde extends Kunde {
