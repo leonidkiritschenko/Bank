@@ -1,37 +1,29 @@
 package bank;
 
-import bank.konto.Konto;
-import bank.kunden.Ansprechpartner;
-import bank.kunden.Firmenkunde;
-import bank.kunden.Kunde;
-import bank.adresse.Adresse;
-import bank.kunden.Privatkunde;
+import bank.account.Account;
+import bank.customer.ContanctPerson;
+import bank.customer.CompanyCustomer;
+import bank.customer.Customer;
+import bank.address.Address;
+import bank.customer.PrivateCustomer;
 import bank.util.ConsoleReader;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-/**
- * Builder Pattern for Creation:
- * https://dzone.com/articles/design-patterns-the-builder-pattern
- */
 
 public class Bank {
 
   private static final Bank INSTANCE = new Bank();
   private String name = "";
   private String BIC = "";
-  private Adresse adresse;
+  private Address address;
 
-  // private ArrayList<Kunde> kunden = new ArrayList<>();
-  private ArrayList<Privatkunde> privatekunden = new ArrayList<>();
-  private ArrayList<Firmenkunde> firmenkunden = new ArrayList<>();
-  private ArrayList<Konto> konten = new ArrayList<>();
+  private ArrayList<PrivateCustomer> privateCustomers = new ArrayList<>();
+  private ArrayList<CompanyCustomer> companyCustomers = new ArrayList<>();
+  private ArrayList<Account> accounts = new ArrayList<>();
 
   private Bank() {
   }
@@ -50,13 +42,13 @@ public class Bank {
    *
    * @param name    of the bank
    * @param BIC     of the bank
-   * @param adresse of the bank
+   * @param address of the bank
    * @return bank instance
    */
-  public static Bank getInstance(String name, String BIC, Adresse adresse) {
+  public static Bank getInstance(String name, String BIC, Address address) {
     INSTANCE.name = name;
     INSTANCE.BIC = BIC;
-    INSTANCE.adresse = adresse;
+    INSTANCE.address = address;
     return INSTANCE;
   }
 
@@ -76,12 +68,12 @@ public class Bank {
     this.BIC = BIC;
   }
 
-  public Adresse getAdresse() {
-    return new Adresse(adresse);
+  public Address getAddress() {
+    return new Address(address);
   }
 
-  public void setAdresse(Adresse adresse) {
-    this.adresse = new Adresse(adresse);
+  public void setAddress(Address address) {
+    this.address = new Address(address);
   }
 
   public void run() {
@@ -110,56 +102,56 @@ public class Bank {
   private void pickMenu(int input) {
     switch (input) {
       case 1:
-        createPrivatkunde();
+        createPrivateCustomer();
         break;
       case 2:
-        createFirmenkunde();
+        createCompanyCustomer();
         break;
       case 3:
-        createKonto();
+        createAccount();
         break;
       case 4:
-        showKundenKontoOfKundennumer();
+        showCustomerAccountOfCustomerNumber();
         break;
       case 5:
-        showKundenKontoOfName();
+        showCustomerAccountOfName();
         break;
       case 6:
-        showKontoOfIBAN();
+        showAccountOfIBAN();
         break;
       case 7:
-        showAllKunden();
+        showAllCustomers();
         break;
       case 8:
-        showAllKundenSorted();
+        showAllCustomersSorted();
         break;
       case 9:
-        showAllKonten();
+        showAllAccounts();
         break;
       case 10:
-        beenden();
+        shutDown();
         break;
     }
   }
 
-  private void createPrivatkunde() {
+  private void createPrivateCustomer() {
 
     System.out.println("Für einen neuen Privatkunden brauchen wir folgende Angaben:");
 
     System.out.println("Vorname: ");
-    String vorname = ConsoleReader.readString("Bitte Vorname angeben.");
+    String firstName = ConsoleReader.readString("Bitte Vorname angeben.");
 
     System.out.println("Nachname: ");
-    String nachname = ConsoleReader.readString("Bitte Nachnamen angeben.");
+    String lastName = ConsoleReader.readString("Bitte Nachnamen angeben.");
 
     System.out.println("Telefonnummer: ");
-    String telefon = ConsoleReader.readString("Bitte Telefonnummer angeben.");
+    String phone = ConsoleReader.readString("Bitte Telefonnummer angeben.");
 
     System.out.println("Email: ");
     String email = ConsoleReader.readString("Bitte Email angeben.");
 
     System.out.println("Geburtsdatum (yyyy-mm-dd): ");
-    LocalDate bday = ConsoleReader.readDate("Bitte Geburtsdatum angeben.");
+    LocalDate birthday = ConsoleReader.readDate("Bitte Geburtsdatum angeben.");
 
     while (true) {
       System.out.println("Wollen Sie die Angaben korrigieren? (j/n)");
@@ -167,25 +159,25 @@ public class Bank {
       String input = ConsoleReader.readString("Bitte 'j' oder 'n'.", options);
       if (input.equalsIgnoreCase("j")) {
         System.out.println("Welche Angaben wollen Sie korrigieren?");
-        System.out.println("(01) Vorname: " + vorname);
-        System.out.println("(02) Nachname: " + nachname);
-        System.out.println("(03) Telefonnummer: " + telefon);
+        System.out.println("(01) Vorname: " + firstName);
+        System.out.println("(02) Nachname: " + lastName);
+        System.out.println("(03) Telefonnummer: " + phone);
         System.out.println("(04) Email: " + email);
-        System.out.println("(05) Geburtsdatum: " + bday);
+        System.out.println("(05) Geburtsdatum: " + birthday);
         List<Integer> optionsNum = List.of(1, 2, 3, 4, 5);
         int inputNum = ConsoleReader.readNumber("Bitte 1-5 als Option angeben.", optionsNum);
         switch (inputNum) {
           case 1:
             System.out.println("Vorname: ");
-            vorname = ConsoleReader.readString("Bitte Vorname angeben.");
+            firstName = ConsoleReader.readString("Bitte Vorname angeben.");
             break;
           case 2:
             System.out.println("Nachname: ");
-            nachname = ConsoleReader.readString("Bitte Nachname angeben.");
+            lastName = ConsoleReader.readString("Bitte Nachname angeben.");
             break;
           case 3:
             System.out.println("Telefonnummer: ");
-            telefon = ConsoleReader.readString("Bitte Telefonnummer angeben.");
+            phone = ConsoleReader.readString("Bitte Telefonnummer angeben.");
             break;
           case 4:
             System.out.println("Email: ");
@@ -193,7 +185,7 @@ public class Bank {
             break;
           case 5:
             System.out.println("Geburtsdatum: ");
-            bday = ConsoleReader.readDate("Bitte Geburtsdatum angeben.");
+            birthday = ConsoleReader.readDate("Bitte Geburtsdatum angeben.");
             break;
           default:
             assert false;
@@ -204,25 +196,22 @@ public class Bank {
       }
     }
 
-    Adresse adresse = createAdress();
-    Privatkunde privatkunde = new Privatkunde(vorname, nachname, telefon, email, bday, adresse);
-    this.privatekunden.add(privatkunde);
-    System.out.println("Neuen Privatkunden mit Kundennumer " + privatkunde.getKundennummer() +
+    Address address = createAddress();
+    PrivateCustomer privateCustomer = new PrivateCustomer(firstName, lastName, phone, email, birthday, address);
+    this.privateCustomers.add(privateCustomer);
+    System.out.println("Neuen Privatkunden mit Kundennumer " + privateCustomer.getCustomernumber() +
         " erfolgreich angelet.");
   }
 
-  private void createFirmenkunde() {
+  private void createCompanyCustomer() {
     System.out.println("Für einen neuen Firmenkunde brauchen wir folgende Angaben:");
 
-    // Firmennamen
     System.out.println("Firmennamen: ");
-    String name = ConsoleReader.readString("Bitte Firmennamen angeben.");
+    String companyName = ConsoleReader.readString("Bitte Firmennamen angeben.");
 
-    // Telefonnummer
     System.out.println("Telefonnummer: ");
-    String telefon = ConsoleReader.readString("Bitte Telefonnummer angeben.");
+    String phone = ConsoleReader.readString("Bitte Telefonnummer angeben.");
 
-    // Email
     System.out.println("Email: ");
     String email = ConsoleReader.readString("Bitte Email angeben.");
 
@@ -232,19 +221,19 @@ public class Bank {
       String input = ConsoleReader.readString("Bitte 'j' oder 'n'.", options);
       if (input.equalsIgnoreCase("j")) {
         System.out.println("Welche Angaben wollen Sie korrigieren?");
-        System.out.println("(01) Firmenname: " + name);
-        System.out.println("(02) Telefonnummer: " + telefon);
+        System.out.println("(01) Firmenname: " + companyName);
+        System.out.println("(02) Telefonnummer: " + phone);
         System.out.println("(03) Email: " + email);
         List<Integer> optionsNum = List.of(1, 2, 3);
         int inputNum = ConsoleReader.readNumber("Bitte 1-3 als Option angeben.", optionsNum);
         switch (inputNum) {
           case 1:
             System.out.println("Firmenname: ");
-            name = ConsoleReader.readString("Bitte Firmenname angeben.");
+            companyName = ConsoleReader.readString("Bitte Firmenname angeben.");
             break;
           case 2:
             System.out.println("Telefonnummer: ");
-            telefon = ConsoleReader.readString("Bitte Telefonnummer angeben.");
+            phone = ConsoleReader.readString("Bitte Telefonnummer angeben.");
             break;
           case 3:
             System.out.println("Email: ");
@@ -259,131 +248,123 @@ public class Bank {
       }
     }
 
-    Ansprechpartner ansprechpartner = createAnsprechpartner();
+    ContanctPerson contanctPerson = createContactPerson();
 
-    Adresse adresse = createAdress();
+    Address address = createAddress();
 
-    Firmenkunde firmenkunde = new Firmenkunde(name, ansprechpartner, telefon, email, adresse);
-    this.firmenkunden.add(firmenkunde);
-    System.out.println("Neuer Firmenkunde mit Kundennumer " + firmenkunde.getKundennummer() +
+    CompanyCustomer companyCustomer = new CompanyCustomer(companyName, contanctPerson, phone, email, address);
+    this.companyCustomers.add(companyCustomer);
+    System.out.println("Neuer Firmenkunde mit Kundennumer " + companyCustomer.getCustomernumber() +
         " erfolgreich angelet.");
   }
 
-  private void createKonto() {
+  private void createAccount() {
     System.out.println("Konto anlegen.");
 
     System.out.println("Zu welchem Kunden wird das Konto zugeordnet?");
     System.out.println("Kundennummer fängt mit 'P' oder 'F' an: ");
     String input = ConsoleReader.readString("Kundennummer fängt mit 'P' oder 'F' an.");
-    Kunde kunde = searchKundeByKundennummer(input);
-    Privatkunde pKunde;
-    Firmenkunde fKunde;
-    if (kunde != null) {
+    Customer customer = searchCustomerByCustomerNumber(input);
+    PrivateCustomer pKunde;
+    CompanyCustomer fKunde;
+    if (customer != null) {
 
       System.out.println("Bitte geben sie die IBAN an: ");
       String iban = ConsoleReader.readString("Bitte IBAN angeben.");
 
-      Konto konto = new Konto(iban);
-      if (kunde instanceof Privatkunde) {
-        pKunde = (Privatkunde) kunde;
-        pKunde.addKonto(konto);
-      }
-      if (kunde instanceof Firmenkunde) {
-        fKunde = (Firmenkunde) kunde;
-        fKunde.addKonto(konto);
-      }
-      konten.add(konto);
+      Account account = new Account(iban);
+      customer.addAccount(account);
+      accounts.add(account);
 
-      System.out.println("Konto mit IBAN " + konto.getIBAN() + " erfolgreich hinzugefügt.");
-
+      System.out.println("Konto mit IBAN " + account.getIBAN() + " erfolgreich hinzugefügt.");
     } else {
       System.out.println("Keinen Kunden mit der Kundennummer " + input + " gefunden!");
     }
   }
 
-  private void showKundenKontoOfKundennumer() {
+  private void showCustomerAccountOfCustomerNumber() {
     System.out.println("Kunde mit Konten anzeigen (Auswahl durch Kundennummer).");
 
     System.out.println("Zu welchem Kunden das Konto anzeigen?");
     System.out.println("Kundennummer fängt mit 'P' oder 'F' an: ");
     String input = ConsoleReader.readString("Kundennummer fängt mit 'P' oder 'F' an.");
 
-    Kunde kunde = searchKundeByKundennummer(input);
-    if (kunde != null) {
-      if (kunde instanceof Privatkunde) {
-        showPrivatkunden((Privatkunde) kunde);
+    Customer customer = searchCustomerByCustomerNumber(input);
+    if (customer != null) {
+      if (customer instanceof PrivateCustomer) {
+        showPrivateCustomers((PrivateCustomer) customer);
       }
 
-      if (kunde instanceof Firmenkunde) {
-        showFirmenkunden((Firmenkunde) kunde);
+      if (customer instanceof CompanyCustomer) {
+        showCompanyCustomers((CompanyCustomer) customer);
       }
-      showKonten(kunde.getKonten().toArray(Konto[]::new));
+      showAccounts(customer.getAccounts().toArray(Account[]::new));
     } else {
       System.out.println("Keinen Kunden mit der Kundennummer " + input + " gefunden!");
     }
   }
 
-  private void showKundenKontoOfName() {
+  private void showCustomerAccountOfName() {
     System.out.println("Kunde mit Konten anzeigen (Auswahl durch Name)");
 
     System.out.println("Zu welchem Kunden das Konto anzeigen?");
     System.out.println("Kundenname (Firma, Vor-, Nachname): ");
     String input = ConsoleReader.readString("Kundenname (Firma, Vor-, Nachname): ");
 
-    Kunde kunde = searchKundeByName(input);
+    Customer customer = searchCustomerByName(input);
 
-    if (kunde != null) {
+    if (customer != null) {
 
-      if (kunde instanceof Privatkunde) {
-        showPrivatkunden((Privatkunde) kunde);
+      if (customer instanceof PrivateCustomer) {
+        showPrivateCustomers((PrivateCustomer) customer);
       }
 
-      if (kunde instanceof Firmenkunde) {
-        showFirmenkunden((Firmenkunde) kunde);
+      if (customer instanceof CompanyCustomer) {
+        showCompanyCustomers((CompanyCustomer) customer);
       }
-      showKonten(kunde.getKonten().toArray(Konto[]::new));
+      showAccounts(customer.getAccounts().toArray(Account[]::new));
 
     } else {
       System.out.println("Keinen Kunden mit dem Namen " + input + " gefunden!");
     }
   }
 
-  private void showKontoOfIBAN() {
+  private void showAccountOfIBAN() {
     System.out.println("Konto anzeigen (Auswahl durch IBAN)");
 
     System.out.println("Zu welcher IBAN suchen Sie das Konto?");
     System.out.println("IBAN: ");
     String input = ConsoleReader.readString("IBAN bitte.");
 
-    Konto konto = searchKontoByIBAN(input);
-    if (konto != null) {
-      showKonten(konto);
+    Account account = searchAccountsByIBAN(input);
+    if (account != null) {
+      showAccounts(account);
     } else {
       System.out.println("Kein Konto mit der IBAN " + input + " gefunden!");
     }
   }
 
-  private void showAllKunden() {
+  private void showAllCustomers() {
     System.out.println("Alle Kunden unsortiert anzeigen");
 
-    showPrivatkunden(privatekunden.toArray(Privatkunde[]::new));
-    showFirmenkunden(firmenkunden.toArray(Firmenkunde[]::new));
+    showPrivateCustomers(privateCustomers.toArray(PrivateCustomer[]::new));
+    showCompanyCustomers(companyCustomers.toArray(CompanyCustomer[]::new));
   }
 
-  private void showAllKundenSorted() {
+  private void showAllCustomersSorted() {
     System.out.println("Alle Kunden sortiert nach aufsteigender Kundenummer anzeigen");
-    Collections.sort(privatekunden);
-    showPrivatkunden(privatekunden.toArray(Privatkunde[]::new));
-    Collections.sort(firmenkunden);
-    showFirmenkunden(firmenkunden.toArray(Firmenkunde[]::new));
+    Collections.sort(privateCustomers);
+    showPrivateCustomers(privateCustomers.toArray(PrivateCustomer[]::new));
+    Collections.sort(companyCustomers);
+    showCompanyCustomers(companyCustomers.toArray(CompanyCustomer[]::new));
   }
 
-  private void showAllKonten() {
+  private void showAllAccounts() {
     System.out.println("Alle Konten unsortiert anzeigen");
-    showKonten(konten.toArray(Konto[]::new));
+    showAccounts(accounts.toArray(Account[]::new));
   }
 
-  private void beenden() {
+  private void shutDown() {
     System.out.println("Wollen Sie wirklich das Programm beenden? (j/n)");
     List<String> options = List.of("j", "n");
     String input = ConsoleReader.readString("Bitte 'j' oder 'n'.", options);
@@ -393,7 +374,7 @@ public class Bank {
     }
   }
 
-  private Adresse createAdress() {
+  private Address createAddress() {
     System.out.println("Für eine neue Adresse brauchen wir folgende Angaben:");
 
     System.out.println("Straße: ");
@@ -405,7 +386,6 @@ public class Bank {
     System.out.println("Ort");
     String city = ConsoleReader.readString("Bitte Ort angeben.");
 
-    // TODO: Export correction into separate method.
     while (true) {
       System.out.println("Wollen Sie die Angaben korrigieren? (j/n)");
       List<String> options = List.of("j", "n");
@@ -438,25 +418,21 @@ public class Bank {
         break;
       }
     }
-    return new Adresse(street, houseNr, city);
+    return new Address(street, houseNr, city);
   }
 
-  private Ansprechpartner createAnsprechpartner() {
+  private ContanctPerson createContactPerson() {
     System.out.println("Für einen neuen Ansprechpartner brauchen wir folgende Angaben:");
 
-    // Vorname
     System.out.println("Vorname: ");
     String vorname = ConsoleReader.readString("Bitte Vorname angeben.");
 
-    // Nachname
     System.out.println("Nachname: ");
     String nachname = ConsoleReader.readString("Bitte Nachnamen angeben.");
 
-    // Telefonnummer
     System.out.println("Telefonnummer: ");
     String telefon = ConsoleReader.readString("Bitte Telefonnummer angeben.");
 
-    // TODO: Export correction into separate method.
     while (true) {
       System.out.println("Wollen Sie die Angaben korrigieren? (j/n)");
       List<String> options = List.of("j", "n");
@@ -489,20 +465,20 @@ public class Bank {
         break;
       }
     }
-    return new Ansprechpartner(vorname, nachname, telefon);
+    return new ContanctPerson(vorname, nachname, telefon);
 
   }
 
-  private Kunde searchKundeByKundennummer(String knummer) {
-    for (Kunde kunde : privatekunden) {
-      if (kunde.getKundennummer().equalsIgnoreCase(knummer)) {
-        return kunde;
+  private Customer searchCustomerByCustomerNumber(String knummer) {
+    for (Customer customer : privateCustomers) {
+      if (customer.getCustomernumber().equalsIgnoreCase(knummer)) {
+        return customer;
       }
     }
 
-    for (Kunde kunde : firmenkunden) {
-      if (kunde.getKundennummer().equalsIgnoreCase(knummer)) {
-        return kunde;
+    for (Customer customer : companyCustomers) {
+      if (customer.getCustomernumber().equalsIgnoreCase(knummer)) {
+        return customer;
       }
     }
     return null;
@@ -514,15 +490,15 @@ public class Bank {
    * @param name of the customer (private: Vorname, Nachname) (company: Firmennamme)
    * @return found customer or null
    */
-  private Kunde searchKundeByName(String name) {
-    for (Firmenkunde kunde : firmenkunden) {
-      if (kunde.getFirmenname().equalsIgnoreCase(name)) {
+  private Customer searchCustomerByName(String name) {
+    for (CompanyCustomer kunde : companyCustomers) {
+      if (kunde.getCompanyName().equalsIgnoreCase(name)) {
         return kunde;
       }
     }
 
-    for (Privatkunde kunde : privatekunden) {
-      if (kunde.getVorname().equalsIgnoreCase(name) || kunde.getNachname().equalsIgnoreCase(name)) {
+    for (PrivateCustomer kunde : privateCustomers) {
+      if (kunde.getFirstName().equalsIgnoreCase(name) || kunde.getLastName().equalsIgnoreCase(name)) {
         return kunde;
       }
     }
@@ -535,61 +511,65 @@ public class Bank {
    * @param iban of the konto
    * @return konto with IBAN or null
    */
-  private Konto searchKontoByIBAN(String iban) {
-    for (Konto konto : konten) {
-      if (konto.getIBAN().equalsIgnoreCase(iban)) {
-        return konto;
+  private Account searchAccountsByIBAN(String iban) {
+    for (Account account : accounts) {
+      if (account.getIBAN().equalsIgnoreCase(iban)) {
+        return account;
       }
     }
     return null;
   }
 
-  private void showPrivatkunden(Privatkunde... kunden) {
+  /**
+   * Prints out a variable number of private clients
+   * @param customers
+   */
+  private void showPrivateCustomers(PrivateCustomer... customers) {
     System.out.println("Kundennummer | Vorname | Nachname | Telefon | Email | Geburtsdatum | Ort | Straße | Nr.");
-    for (Privatkunde kunde : kunden) {
-      Adresse adresse = kunde.getAdresse();
+    for (PrivateCustomer kunde : customers) {
+      Address address = kunde.getAddress();
       System.out.println(
-          kunde.getKundennummer() + " | " +
-              kunde.getVorname() + " | " +
-              kunde.getNachname() + " | " +
-              kunde.getTelefon() + " | " +
+          kunde.getCustomernumber() + " | " +
+              kunde.getFirstName() + " | " +
+              kunde.getLastName() + " | " +
+              kunde.getPhone() + " | " +
               kunde.getEmail() + " | " +
-              kunde.getGeburtsdatum() + " | " +
-              adresse.getOrt() + " | " +
-              adresse.getAdresszeile1() + " | " +
-              adresse.getAdresszeile2()
+              kunde.getBirthday() + " | " +
+              address.getCity() + " | " +
+              address.getStreet() + " | " +
+              address.getHouseNr()
       );
     }
     System.out.println();
   }
 
-  private void showFirmenkunden(Firmenkunde... kunden) {
+  private void showCompanyCustomers(CompanyCustomer... kunden) {
     System.out.println("Kundennummer | Firmenname | Ansprechpartner Name & Nummer | Telefon | Email | Geburtsdatum | Ort | Straße | Nr.");
-    for (Firmenkunde kunde : kunden) {
-      Adresse adresse = kunde.getAdresse();
-      Ansprechpartner partner = kunde.getAnsprechpartner();
+    for (CompanyCustomer kunde : kunden) {
+      Address address = kunde.getAddress();
+      ContanctPerson partner = kunde.getContanctPerson();
       System.out.println(
-          kunde.getKundennummer() + " | " +
-              kunde.getFirmenname() + " | " +
-              partner.getVorname() +
-              partner.getNachname() + " & " +
-              partner.getTelefon() + " | " +
-              kunde.getTelefon() + " | " +
+          kunde.getCustomernumber() + " | " +
+              kunde.getCompanyName() + " | " +
+              partner.getFirstName() + " " +
+              partner.getLastName() + " & " +
+              partner.getPhone() + " | " +
+              kunde.getPhone() + " | " +
               kunde.getEmail() + " | " +
-              adresse.getOrt() + " | " +
-              adresse.getAdresszeile1() + " | " +
-              adresse.getAdresszeile2()
+              address.getCity() + " | " +
+              address.getStreet() + " | " +
+              address.getHouseNr()
       );
     }
     System.out.println();
   }
 
-  private void showKonten(Konto... konten) {
+  private void showAccounts(Account... konten) {
     System.out.println("IBAN | Kontostand");
-    for (Konto konto : konten) {
+    for (Account account : konten) {
       System.out.println(
-          konto.getIBAN() + " | " +
-              konto.getKontostand()
+          account.getIBAN() + " | " +
+              account.getBalance()
       );
     }
     System.out.println();
