@@ -1,5 +1,8 @@
 package bank.account;
 
+/**
+ * Account is a value class with IBAN and balance of money.
+ */
 public class Account {
   private String IBAN;
   private double balance = 0.0;

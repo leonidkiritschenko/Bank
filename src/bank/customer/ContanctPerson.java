@@ -1,5 +1,8 @@
 package bank.customer;
 
+/**
+ * ContanctPerson is a value class.
+ */
 public class ContanctPerson {
   private String firstName;
   private String lastName;

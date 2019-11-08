@@ -3,7 +3,10 @@ package bank.customer;
 import bank.address.Address;
 
 import java.time.LocalDate;
-
+/**
+ * PrivateCustomer is a value class.
+ * Customer number will be assigned automatically, starts with "F" and is unique.
+ */
 public class PrivateCustomer extends Customer {
   private static int customerNumberCounter = 1001;
   private String customerNumber;

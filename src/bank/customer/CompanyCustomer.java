@@ -2,6 +2,10 @@ package bank.customer;
 
 import bank.address.Address;
 
+/**
+ * CompanyCustomer is a value class.
+ * Customer number will be assigned automatically, starts with "P" and is unique.
+ */
 public class CompanyCustomer extends Customer {
   private static int customerNumberCounter = 1001;
   private String customerNumber;

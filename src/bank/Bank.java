@@ -13,7 +13,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-
+/**
+ * Bank is the main class of the bank application.
+ * run() is used to start the
+ */
 public class Bank {
 
   private static final Bank INSTANCE = new Bank();
@@ -76,6 +79,9 @@ public class Bank {
     this.address = new Address(address);
   }
 
+  /**
+   * Execute run to work with the bank
+   */
   public void run() {
     int input;
     while (true) {
@@ -86,6 +92,9 @@ public class Bank {
     }
   }
 
+  /**
+   * Helper method to show the menu
+   */
   private void showMenu() {
     System.out.println("(01) Privatkunde anlegen");
     System.out.println("(02) Firmenkunde anlegen");
@@ -99,6 +108,9 @@ public class Bank {
     System.out.println("(10) Beenden");
   }
 
+  /**
+   * Input helper method to pick option from menu
+   */
   private void pickMenu(int input) {
     switch (input) {
       case 1:
@@ -134,6 +146,9 @@ public class Bank {
     }
   }
 
+  /**
+   * Input helper method to create a private customer
+   */
   private void createPrivateCustomer() {
 
     System.out.println("Für einen neuen Privatkunden brauchen wir folgende Angaben:");
@@ -203,6 +218,9 @@ public class Bank {
         " erfolgreich angelet.");
   }
 
+  /**
+   * Input helper method to create a company customer
+   */
   private void createCompanyCustomer() {
     System.out.println("Für einen neuen Firmenkunde brauchen wir folgende Angaben:");
 
@@ -258,6 +276,9 @@ public class Bank {
         " erfolgreich angelet.");
   }
 
+  /**
+   * Input helper method to create an account and assign to customer by customer number
+   */
   private void createAccount() {
     System.out.println("Konto anlegen.");
 
@@ -282,6 +303,9 @@ public class Bank {
     }
   }
 
+  /**
+   * Input helper method to show account with customer number and corresponding accounts
+   */
   private void showCustomerAccountOfCustomerNumber() {
     System.out.println("Kunde mit Konten anzeigen (Auswahl durch Kundennummer).");
 
@@ -304,6 +328,9 @@ public class Bank {
     }
   }
 
+  /**
+   * Input helper method to show account with specific name and corresponding accounts
+   */
   private void showCustomerAccountOfName() {
     System.out.println("Kunde mit Konten anzeigen (Auswahl durch Name)");
 
@@ -329,6 +356,9 @@ public class Bank {
     }
   }
 
+  /**
+   * Input helper method to show account with specific IBAN
+   */
   private void showAccountOfIBAN() {
     System.out.println("Konto anzeigen (Auswahl durch IBAN)");
 
@@ -344,6 +374,9 @@ public class Bank {
     }
   }
 
+  /**
+   * Shows all customers (private & company) unsorted
+   */
   private void showAllCustomers() {
     System.out.println("Alle Kunden unsortiert anzeigen");
 
@@ -351,6 +384,9 @@ public class Bank {
     showCompanyCustomers(companyCustomers.toArray(CompanyCustomer[]::new));
   }
 
+  /**
+   * Shows all customers (private & company) sorted by the customer number
+   */
   private void showAllCustomersSorted() {
     System.out.println("Alle Kunden sortiert nach aufsteigender Kundenummer anzeigen");
     Collections.sort(privateCustomers);
@@ -359,11 +395,17 @@ public class Bank {
     showCompanyCustomers(companyCustomers.toArray(CompanyCustomer[]::new));
   }
 
+  /**
+   * Shows all accounts unsorted
+   */
   private void showAllAccounts() {
     System.out.println("Alle Konten unsortiert anzeigen");
     showAccounts(accounts.toArray(Account[]::new));
   }
 
+  /**
+   * Input helper method to shut down the bank
+   */
   private void shutDown() {
     System.out.println("Wollen Sie wirklich das Programm beenden? (j/n)");
     List<String> options = List.of("j", "n");
@@ -374,6 +416,10 @@ public class Bank {
     }
   }
 
+  /**
+   * Input helper method to create an address
+   * @return Address object
+   */
   private Address createAddress() {
     System.out.println("Für eine neue Adresse brauchen wir folgende Angaben:");
 
@@ -421,6 +467,10 @@ public class Bank {
     return new Address(street, houseNr, city);
   }
 
+  /**
+   * Input helper method to create a contact person
+   * @return Customer object
+   */
   private ContanctPerson createContactPerson() {
     System.out.println("Für einen neuen Ansprechpartner brauchen wir folgende Angaben:");
 
@@ -469,15 +519,20 @@ public class Bank {
 
   }
 
-  private Customer searchCustomerByCustomerNumber(String knummer) {
+  /**
+   * Searches for a customer (private and company) based on customer number
+   * @param customerNumber for the search in List with private and company customers
+   * @return customer with the customer number or null if not existing
+   */
+  private Customer searchCustomerByCustomerNumber(String customerNumber) {
     for (Customer customer : privateCustomers) {
-      if (customer.getCustomernumber().equalsIgnoreCase(knummer)) {
+      if (customer.getCustomernumber().equalsIgnoreCase(customerNumber)) {
         return customer;
       }
     }
 
     for (Customer customer : companyCustomers) {
-      if (customer.getCustomernumber().equalsIgnoreCase(knummer)) {
+      if (customer.getCustomernumber().equalsIgnoreCase(customerNumber)) {
         return customer;
       }
     }
@@ -521,8 +576,8 @@ public class Bank {
   }
 
   /**
-   * Prints out a variable number of private clients
-   * @param customers
+   * Prints out a variable number of private customers
+   * @param customers is a single customer or an array of customers to be printed
    */
   private void showPrivateCustomers(PrivateCustomer... customers) {
     System.out.println("Kundennummer | Vorname | Nachname | Telefon | Email | Geburtsdatum | Ort | Straße | Nr.");
@@ -543,9 +598,13 @@ public class Bank {
     System.out.println();
   }
 
-  private void showCompanyCustomers(CompanyCustomer... kunden) {
+  /**
+   * Prints out a variable number of company customers
+   * @param customers is a single customer or an array of customers to be printed
+   */
+  private void showCompanyCustomers(CompanyCustomer... customers) {
     System.out.println("Kundennummer | Firmenname | Ansprechpartner Name & Nummer | Telefon | Email | Geburtsdatum | Ort | Straße | Nr.");
-    for (CompanyCustomer kunde : kunden) {
+    for (CompanyCustomer kunde : customers) {
       Address address = kunde.getAddress();
       ContanctPerson partner = kunde.getContanctPerson();
       System.out.println(
@@ -564,9 +623,13 @@ public class Bank {
     System.out.println();
   }
 
-  private void showAccounts(Account... konten) {
+  /**
+   * Prints out a variable number of accounts
+   * @param accounts is a single account or an array of accounts to be printed
+   */
+  private void showAccounts(Account... accounts) {
     System.out.println("IBAN | Kontostand");
-    for (Account account : konten) {
+    for (Account account : accounts) {
       System.out.println(
           account.getIBAN() + " | " +
               account.getBalance()

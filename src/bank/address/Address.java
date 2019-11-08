@@ -1,15 +1,13 @@
 package bank.address;
 
+/**
+ * Address is a value class with street, house number, and city.
+ */
 public class Address {
   private String street;
   private String houseNr;
   private String city;
 
-  /**
-   * Copy constructor
-   *
-   * @param address is to be coppied
-   */
   public Address(Address address) {
     this.street = address.street;
     this.houseNr = address.street;

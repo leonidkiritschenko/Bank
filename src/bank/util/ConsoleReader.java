@@ -7,6 +7,9 @@ import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.List;
 
+/**
+ * Abstract helper class for input from console.
+ */
 public abstract class ConsoleReader {
   private static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 

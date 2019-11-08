@@ -5,6 +5,10 @@ import bank.address.Address;
 
 import java.util.ArrayList;
 
+/**
+ * Customer is abstract class with the general customer data.
+ * Customer can only have 10 accounts.
+ */
 public abstract class Customer implements Comparable {
   private String phone;
   private String email;
@@ -19,6 +23,10 @@ public abstract class Customer implements Comparable {
     this.address = address;
   }
 
+  /**
+   * Abstract getter method for customer number.
+   * @return String customer number.
+   */
   public abstract String getCustomernumber();
 
   public String getPhone() {
@@ -49,6 +57,11 @@ public abstract class Customer implements Comparable {
     return new ArrayList<>(this.accounts);
   }
 
+  /**
+   * Adds an account to the customer, but only if there are no more than 10
+   * @param account to be added to customer
+   * @return true if account been added; false if there are to many
+   */
   public boolean addAccount(Account account) {
     if (this.accounts.size() < 10) {
       this.accounts.add(new Account(account));
